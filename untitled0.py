@@ -57,12 +57,17 @@ def build_model(bert_layer, max_len=512):
     
     return model
 
+# TensorFlow Hub 是已訓練機器學習模型的存放區，這些模型可供微調，也可在任何地方部署。只要幾行程式碼，就能重複使用 BERT 和 Faster R-CNN 等經過訓練的模型。
 module_url = "https://tfhub.dev/tensorflow/bert_en_uncased_L-24_H-1024_A-16/1"
 bert_layer = hub.KerasLayer(module_url, trainable=True)
 
+# Pandas 是 python 的一個數據分析 lib
+# 提供高效能、簡易使用的資料格式(Data Frame)讓使用者可以快速操作及分析資料
 train = pd.read_csv("/home/marktsao/DLpractice/LSTM Sentiment Analysis/using_bert_folder/train.csv")
 test = pd.read_csv("/home/marktsao/DLpractice/LSTM Sentiment Analysis/using_bert_folder/test.csv")
+# 要用來提交的 data
 submission = pd.read_csv("/home/marktsao/DLpractice/LSTM Sentiment Analysis/using_bert_folder/sample_submission.csv")
+
 
 vocab_file = bert_layer.resolved_object.vocab_file.asset_path.numpy()
 do_lower_case = bert_layer.resolved_object.do_lower_case.numpy()
