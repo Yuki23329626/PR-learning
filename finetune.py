@@ -12,6 +12,7 @@ import tensorflow as tf
 from tensorflow.keras.layers import Dense, Input
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import Model
+from tensorflow.keras import backend
 from tensorflow.keras.callbacks import ModelCheckpoint
 import tensorflow_hub as hub
 from datetime import datetime
@@ -21,6 +22,9 @@ from bert import tokenization
 #from nltk.tokenize import word_tokenize
 
 start = datetime.now()
+
+tf.debugging.set_log_device_placement(True)
+tf.device('/device:GPU:0')
 
 def bert_encode(texts, tokenizer, max_len=512):
     all_tokens = []
