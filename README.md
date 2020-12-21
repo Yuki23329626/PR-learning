@@ -6,3 +6,7 @@
 pip install tensorflow
 pip install tensorflow-cpu
 ```
+2. anaconda  
+```bash
+export TFHUB_CACHE_DIR=./tmp
+```
