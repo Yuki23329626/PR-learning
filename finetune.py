@@ -24,7 +24,7 @@ from bert import tokenization
 start = datetime.now()
 
 tf.debugging.set_log_device_placement(True)
-tf.device('/device:GPU:0')
+# tf.device('/device:GPU:0')
 
 def bert_encode(texts, tokenizer, max_len=512):
     all_tokens = []
@@ -64,7 +64,7 @@ def build_model(bert_layer, max_len=512):
     return model
 
 # TensorFlow Hub 是已訓練機器學習模型的存放區，這些模型可供微調，也可在任何地方部署。只要幾行程式碼，就能重複使用 BERT 和 Faster R-CNN 等經過訓練的模型。
-module_url = "https://tfhub.dev/tensorflow/bert_en_uncased_L-24_H-1024_A-16/3"
+module_url = "https://tfhub.dev/tensorflow/bert_en_uncased_L-24_H-1024_A-16/1"
 bert_layer = hub.KerasLayer(module_url, trainable=True)
 
 # Pandas 是 python 的一個數據分析 lib
@@ -86,7 +86,7 @@ train_labels = train.target.values
 model = build_model(bert_layer, max_len=160)
 model.summary()
 
-checkpoint = ModelCheckpoint('modelv4.h5', monitor='val_loss', save_best_only=True)
+checkpoint = ModelCheckpoint('modelv2.h5', monitor='val_loss', save_best_only=True)
 
 train_history = model.fit(
     train_input, train_labels,
@@ -100,7 +100,7 @@ model.load_weights('model.h5')
 test_pred = model.predict(test_input)
 
 submission['target'] = test_pred.round().astype(int)
-submission.to_csv('submission.csv', index=False)
+submission.to_csv('submission_v2.csv', index=False)
 
 end = datetime.now()
 
