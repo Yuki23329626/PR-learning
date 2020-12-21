@@ -86,7 +86,7 @@ train_labels = train.target.values
 model = build_model(bert_layer, max_len=160)
 model.summary()
 
-checkpoint = ModelCheckpoint('modelv3.h5', monitor='val_loss', save_best_only=True)
+checkpoint = ModelCheckpoint('modelv4.h5', monitor='val_loss', save_best_only=True)
 
 train_history = model.fit(
     train_input, train_labels,
