@@ -14,11 +14,13 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import Model
 from tensorflow.keras.callbacks import ModelCheckpoint
 import tensorflow_hub as hub
-
+from datetime import datetime
 from bert import tokenization
 #import nltk
 #nltk.download("popular")
 #from nltk.tokenize import word_tokenize
+
+start = datetime.now()
 
 def bert_encode(texts, tokenizer, max_len=512):
     all_tokens = []
@@ -95,3 +97,7 @@ test_pred = model.predict(test_input)
 
 submission['target'] = test_pred.round().astype(int)
 submission.to_csv('submission.csv', index=False)
+
+end = datetime.now()
+
+print("Time spent: \n", end - start)
