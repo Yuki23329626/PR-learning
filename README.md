@@ -9,6 +9,7 @@ pip install tensorflow-cpu
 2. anaconda  
 ```bash
 export TFHUB_CACHE_DIR=./tmp
+conda create -n pr python=3.6 tensorflow-gpu=2.2.0
 ```
 3. version match
 GPU: GTX 960  
