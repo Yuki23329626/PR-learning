@@ -1,14 +1,8 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Dec 14 05:06:13 2020
 
-@author: marktsao
-"""
+# import warnings
 
-import warnings
-
-warnings.filterwarnings('ignore')
+# warnings.filterwarnings('ignore')
 
 import os
 os.environ['PYTHONHASHSEED']='0'
@@ -46,23 +40,23 @@ def bert_encode(texts, tokenizer, max_len=512):
     all_tokens = []
     all_masks = []
     all_segments = []
-    
+
     for text in texts:
         text = tokenizer.tokenize(text)
-            
+
         text = text[:max_len-2]
         input_sequence = ["[CLS]"] + text + ["[SEP]"]
         pad_len = max_len - len(input_sequence)
-        
+
         tokens = tokenizer.convert_tokens_to_ids(input_sequence)
         tokens += [0] * pad_len
         pad_masks = [1] * len(input_sequence) + [0] * pad_len
         segment_ids = [0] * max_len
-        
+
         all_tokens.append(tokens)
         all_masks.append(pad_masks)
         all_segments.append(segment_ids)
-    
+
     return np.array(all_tokens), np.array(all_masks), np.array(all_segments)
 
 def build_model(bert_layer, max_len=512):
@@ -73,10 +67,10 @@ def build_model(bert_layer, max_len=512):
     _, sequence_output = bert_layer([input_word_ids, input_mask, segment_ids])
     clf_output = sequence_output[:, 0, :]
     out = Dense(1, activation='sigmoid')(clf_output)
-    
+
     model = Model(inputs=[input_word_ids, input_mask, segment_ids], outputs=out)
     model.compile(Adam(lr=1e-5), loss='binary_crossentropy', metrics=['accuracy'])
-    
+
     return model
 
 module_url = "https://tfhub.dev/tensorflow/bert_en_uncased_L-24_H-1024_A-16/1"
@@ -122,7 +116,7 @@ model.load_weights('model.h5')
 #     plt.plot(train_history.history[test_acc],'r')
 #     test_acc_list.extend(train_history.history[test_acc])
 #     #print("test_acc_list =", test_acc_list)
-    
+
 #     plt.title('Learning curve')
 #     plt.ylabel('Accuracy')
 #     plt.xlabel('Epoch')
@@ -140,7 +134,7 @@ model.load_weights('model.h5')
 #     plt.plot(train_history.history[test_loss],'r')
 #     test_acc_list.extend(train_history.history[test_loss])
 #     #print("test_acc_list =", test_acc_list)
-    
+
 #     plt.title('Loss curve')
 #     plt.xlabel('Epoch')
 #     plt.legend(['train','test'], loc='upper right')
@@ -157,7 +151,7 @@ model.load_weights('model.h5')
 #     #plt.plot(train_history.history[test_acc],'r')
 #     #test_acc_list.extend(train_history.history[test_acc])
 #     #print("test_acc_list =", test_acc_list)
-    
+
 #     plt.title('Learning curve')
 #     plt.ylabel('Accuracy')
 #     plt.xlabel('Epoch')
@@ -175,7 +169,7 @@ model.load_weights('model.h5')
 #     #plt.plot(train_history.history[test_loss],'r')
 #     #test_acc_list.extend(train_history.history[test_loss])
 #     #print("test_acc_list =", test_acc_list)
-    
+
 #     plt.title('Loss curve')
 #     plt.xlabel('Epoch')
 #     plt.legend(['train'], loc='upper right')
@@ -183,19 +177,32 @@ model.load_weights('model.h5')
 #     plt.show()
 # show_train_history_acc('loss', 'val_loss')
 
+from os import system
 
-s = input("Enter sentence to predict:")
-s = np.array([s], dtype=object);
-bs = bert_encode(s, tokenizer, max_len=160)
-bs_pred = model.predict(bs);
-print("Result(1 for disaster,0 for non-disaster):",bs_pred)
-yn = input("If you want to predict again, please enter y otherwise enter n:");
+system('clear')
 
-while (yn == 'y'):
-    s = input("Enter sentence to predict:")
+#s = input("\nInput: ")
+#s = np.array([s], dtype=object);
+#bs = bert_encode(s, tokenizer, max_len=160)
+#bs_pred = model.predict(bs);
+#print("Result(1 for disaster,0 for non-disaster):",bs_pred)
+#if bs_pred[0] >= 0.5:
+#    print("[ True ] It is about disaster.")
+#else:
+#    print("[ False ] It's not about disaster.")
+
+#yn = input("If you want to predict again, please enter y otherwise enter n:");
+
+while (True):
+    s = input("\nInput: ")
+    if(not s):
+        continue
     s = np.array([s], dtype=object);
     bs = bert_encode(s, tokenizer, max_len=160)
     bs_pred = model.predict(bs);
     print("Result(1 for disaster,0 for non-disaster):",bs_pred)
-    yn = input("If you want to predict again, please enter y otherwise enter n:");
-    
+    if bs_pred[0] >= 0.5:
+        print("[ True ] It is about disaster.")
+    else:
+        print("[ False ] It's not about disaster.")
+    # yn = input("If you want to predict again, please enter y otherwise enter n:");

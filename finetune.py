@@ -1,10 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Dec 14 05:06:13 2020
 
-@author: marktsao
-"""
+# import warnings
+
+# warnings.filterwarnings('ignore')
+
+import os
+os.environ['PYTHONHASHSEED']='0'
+os.environ['CUDA_VISIBLE_DEVICES']='0'
+os.environ['TF_CUDNN_USE_AUTOTUNE']='0'
+os.environ['KMP_WARNINGS']='off'
+os.environ['TF_XLA_FLAGS']='--tf_xla_enable_xla_devices'
+import numpy as np
+import tensorflow as tf
+print("Version: ", tf.__version__)
+print("Eager mode: ", tf.executing_eagerly())
+print("GPU is", "available" if tf.config.list_physical_devices('GPU') else "NOT AVAILABLE")
 
 import numpy as np
 import pandas as pd
@@ -12,11 +23,13 @@ import tensorflow as tf
 from tensorflow.keras.layers import Dense, Input
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import Model
-from tensorflow.keras import backend
 from tensorflow.keras.callbacks import ModelCheckpoint
 import tensorflow_hub as hub
-from datetime import datetime
+import matplotlib.pyplot as plt
+
 from bert import tokenization
+from datetime import datetime
+
 #import nltk
 #nltk.download("popular")
 #from nltk.tokenize import word_tokenize
