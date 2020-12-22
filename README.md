@@ -10,3 +10,8 @@ pip install tensorflow-cpu
 ```bash
 export TFHUB_CACHE_DIR=./tmp
 ```
+3. version match
+GPU: GTX 960  
+tensorflow-gpu==2.4  
+cuda: 11.1  
+cudnn: 11.1  
