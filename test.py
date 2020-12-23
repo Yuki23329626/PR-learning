@@ -17,7 +17,7 @@
 # print("Eager mode: ", tf.executing_eagerly())
 # print("GPU is", "available" if tf.config.list_physical_devices('GPU') else "NOT AVAILABLE")
 
-# import numpy as np
+import numpy as np
 import pandas as pd
 # import tensorflow as tf
 # from tensorflow.keras.layers import Dense, Input
@@ -93,17 +93,28 @@ values = []
 
 keys = set(train.keyword)
 values = [0]*len(keys)
+train_dict = dict(zip(keys, values))
 
-new_dict = dict(zip(keys, values))
+keys = set(test.keyword)
+values = [0]*len(keys)
+test_dict = dict(zip(keys, values))
 
-print(new_dict)
+# print(train_dict)
+# print(test_dict)
 
 for keyword in train.keyword:
-    new_dict[keyword] += 1
+    train_dict[keyword] += 1
 
-print(new_dict)
-print(list(new_dict.keys()))
-print(list(new_dict.values()))
+for keyword in test.keyword:
+    test_dict[keyword] += 1
 
-plt.plot(list(new_dict.values()))
+# print(train_dict)
+# print(list(train_dict.keys()))
+# print(list(train_dict.values()))
+# print(np.arange(0, len(set(train.keyword))))
+# print(list(train_dict.values()))
+plt.figure(figsize=(16, 8))
+plt.subplot(111)
+plt.plot(np.arange(0, len(set(train.keyword))),list(train_dict.values()),np.arange(0, len(set(test.keyword))),list(test_dict.values()))
+plt.suptitle('Numeber of each Category')
 plt.show()
